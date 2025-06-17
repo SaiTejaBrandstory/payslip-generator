@@ -317,7 +317,7 @@ const ManualEntry: React.FC = () => {
         width: payslipRef.current.offsetWidth,
         height: payslipRef.current.offsetHeight,
         scale: 3
-      });
+      } as any);
 
       const link = document.createElement('a');
       link.download = `${getFileName(formData.payPeriod)}.png`;
@@ -340,7 +340,7 @@ const ManualEntry: React.FC = () => {
         width: payslipRef.current.offsetWidth,
         height: payslipRef.current.offsetHeight,
         scale: 3
-      });
+      } as any);
 
       const imgData = canvas.toDataURL('image/png');
       
