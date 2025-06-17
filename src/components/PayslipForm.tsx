@@ -64,15 +64,15 @@ const PayslipForm: React.FC<Props> = ({ onSubmit }) => {
     }
   };
 
-  const handleEarningChange = (index: number, amount: number) => {
+  const handleEarningChange = (index: number, field: string, value: string | number) => {
     const newEarnings = [...formData.earnings];
-    newEarnings[index] = { ...newEarnings[index], amount };
+    newEarnings[index] = { ...newEarnings[index], [field]: value };
     setFormData(prev => ({ ...prev, earnings: newEarnings }));
   };
 
-  const handleDeductionChange = (index: number, amount: number) => {
+  const handleDeductionChange = (index: number, field: string, value: string | number) => {
     const newDeductions = [...formData.deductions];
-    newDeductions[index] = { ...newDeductions[index], amount };
+    newDeductions[index] = { ...newDeductions[index], [field]: value };
     setFormData(prev => ({ ...prev, deductions: newDeductions }));
   };
 
@@ -402,12 +402,14 @@ const PayslipForm: React.FC<Props> = ({ onSubmit }) => {
               <button
                 type="button"
                 onClick={() => {
-                  const newEarnings = formData.earnings.filter((_, i) => i !== index);
-                  setFormData(prev => ({ ...prev, earnings: newEarnings }));
+                  setFormData(prev => ({
+                    ...prev,
+                    earnings: [...prev.earnings, { title: '', amount: 0 }]
+                  }));
                 }}
                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
               >
-                Remove
+                Add Earning
               </button>
             </div>
             {formData.earnings.map((earning, index) => (
@@ -429,6 +431,18 @@ const PayslipForm: React.FC<Props> = ({ onSubmit }) => {
                   required
                   min="0"
                 />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormData(prev => ({
+                      ...prev,
+                      earnings: prev.earnings.filter((_, i) => i !== index)
+                    }));
+                  }}
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+                >
+                  Remove
+                </button>
               </div>
             ))}
           </div>
@@ -440,12 +454,14 @@ const PayslipForm: React.FC<Props> = ({ onSubmit }) => {
               <button
                 type="button"
                 onClick={() => {
-                  const newDeductions = formData.deductions.filter((_, i) => i !== index);
-                  setFormData(prev => ({ ...prev, deductions: newDeductions }));
+                  setFormData(prev => ({
+                    ...prev,
+                    deductions: [...prev.deductions, { title: '', amount: 0 }]
+                  }));
                 }}
                 className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
               >
-                Remove
+                Add Deduction
               </button>
             </div>
             {formData.deductions.map((deduction, index) => (
@@ -467,6 +483,18 @@ const PayslipForm: React.FC<Props> = ({ onSubmit }) => {
                   required
                   min="0"
                 />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormData(prev => ({
+                      ...prev,
+                      deductions: prev.deductions.filter((_, i) => i !== index)
+                    }));
+                  }}
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+                >
+                  Remove
+                </button>
               </div>
             ))}
           </div>
@@ -494,7 +522,7 @@ const PayslipForm: React.FC<Props> = ({ onSubmit }) => {
       {showPreview && (
         <div className="mt-8">
           <div ref={payslipRef}>
-            <PayslipPreview data={formData} />
+            <PayslipPreview payslip={formData} />
           </div>
         </div>
       )}
